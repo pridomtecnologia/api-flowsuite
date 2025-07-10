@@ -1,0 +1,1 @@
+Projeto FlowSuite, é um CRM que foi criado para gestão de orçamento de empresas para administração dos seus clientes
