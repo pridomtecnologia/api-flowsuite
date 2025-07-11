@@ -30,3 +30,25 @@ class UsuarioController:
                 detail={'message': 'Erro ao cadastrar usuário'}
             )
             
+    def user_login(self, user):
+        
+        if not user.email or not user.password:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail={'message': 'E-mail ou senha inválida'},
+            )
+        
+        try:
+            
+            use_case_login = UserUseCases(db_session=self.db_session).user_login(user=user)
+            
+            return JSONResponse(
+                content=use_case_login,
+                status_code=status.HTTP_200_OK
+            )
+            
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail={'message': 'Erro ao realizar autenticação'}
+            )
