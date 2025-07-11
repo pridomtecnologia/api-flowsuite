@@ -1,13 +1,11 @@
 import re
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 class UserSchemas(BaseModel):
     name: str
     email: str
     password: str
-
-    @validator('name')
-    def validate_username(cls, value):
-        if not re.match('^([a-z]|[0-9]|@)+$', value):
-            raise ValueError('Username format invalid')
-        return value
+    
+class UserLoginSchemas(BaseModel):
+    email: str
+    password: str
