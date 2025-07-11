@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from decouple import config
-from app.use_cases.user_use_cases import UserUseCases
+from app.use_cases.usuario.user_use_cases import UserUseCases
 
 oauth_scheme = OAuth2PasswordBearer(tokenUrl='/user/login')
 
