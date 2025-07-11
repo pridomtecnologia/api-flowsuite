@@ -1,39 +1,33 @@
 from datetime import datetime, timedelta
 from fastapi import status
 from fastapi.exceptions import HTTPException
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from passlib.context import CryptContext
 from jose import jwt, JWTError
+from passlib.context import CryptContext
 from decouple import config
-from app.gateways.user_gateway import UserGateway
-from app.schemas.user_schema import UserSchemas
-
+from app.gateways.usuario.user_gateway import UserGateway
+from app.entidades.usuario.usuario_entidade import UsuarioEntidade
 
 SECRET_KEY = config('SECRET_KEY')
 ALGORITHM = config('ALGORITHM')
 
 crypt_context = CryptContext(schemes=['sha256_crypt'])
 
-class UserUseCases:
-    def __init__(self, db_session: Session):
+class UserUseCases(UsuarioEntidade):
+    
+    def __init__(self, db_session):
         self.db_session = db_session
 
-    def user_register(self, user: UserSchemas):
-        user_model = UserGateway(
-            username=user.username,
-            password=crypt_context.hash(user.password)
-        )
-        try:
-            self.db_session.add(user_model)
-            self.db_session.commit()
-        except IntegrityError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail='User already exists'
-            )
+    def user_register(self, user):
 
-    def user_login(self, user: UserSchemas, expires_in: int = 30):
+        try:
+            UserGateway(db_session=self.db_session).user_register(user)
+            
+            return True
+        except IntegrityError:
+            raise False
+
+    def user_login(self, user, expires_in: int = 30):
         user_on_db = self.db_session.query(UserGateway).filter_by(username=user.username).first()
 
         if user_on_db is None:
