@@ -1,9 +1,15 @@
 from app.models.usuario.usuario_model import UsuarioModel
+from app.models.role.role_model import RoleModel
+from app.models.permission.permission_model import PermissionModel
+from app.models.user_role.user_role_model import UserRoleModel
+from app.models.role_permission.role_permission_model import RolePermissionModel
+from app.models.permission.permission_model import PermissionModel
 from app.entidades.usuario.usuario_entidade import UsuarioEntidade
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from decouple import config
+from sqlalchemy import func
 
 SECRET_KEY = config('SECRET_KEY')
 ALGORITHM = config('ALGORITHM')
@@ -46,13 +52,45 @@ class UserGateway(UsuarioEntidade):
                 'sub': user.email,
                 'exp': exp
             }
+            
+            permission_usuario = self.get_user_permissions(user_id=user_on_db.id_user)
 
             access_token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
             return {
+                'id_user': user_on_db.id_user,
+                'name': user_on_db.name,
+                'email': user_on_db.email,
                 'access_token': access_token,
-                'exp': exp.isoformat()
+                'exp': exp.isoformat(),
+                'permissions': permission_usuario
             }
         except Exception as e:
             raise False
     
+    def get_user_permissions(self, user_id):  
+        
+        query = (
+            self.db_session.query(
+                UsuarioModel.id_user,
+                UsuarioModel.name,
+                RoleModel.role,
+                func.STRING_AGG(PermissionModel.permission, ', ').label("permissions")
+            )
+            .join(UserRoleModel, UserRoleModel.user_id == UsuarioModel.id_user)
+            .join(RoleModel, RoleModel.id_role == UserRoleModel.role_id)
+            .join(RolePermissionModel, RolePermissionModel.role_id == RoleModel.id_role)
+            .join(PermissionModel, PermissionModel.id_permission == RolePermissionModel.permission_id)
+            .filter(UsuarioModel.id_user == user_id)
+            .group_by(UsuarioModel.id_user, UsuarioModel.name, RoleModel.role)
+        )
+
+        result = query.first()
+
+        if not result:
+            raise False
+
+        return {
+            "role":result.role,
+            "permissions":result.permissions
+        }
