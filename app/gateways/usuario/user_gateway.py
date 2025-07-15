@@ -1,3 +1,5 @@
+from fastapi import status
+from fastapi.exceptions import HTTPException
 from app.models.usuario.usuario_model import UsuarioModel
 from app.models.role.role_model import RoleModel
 from app.models.permission.permission_model import PermissionModel
@@ -94,3 +96,21 @@ class UserGateway(UsuarioEntidade):
             "role":result.role,
             "permissions":result.permissions
         }
+        
+    def verify_token(self, access_token):
+        
+        try:
+            data = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
+        except JWTError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Invalid access token'
+            )
+        
+        user_on_db = self.db_session.query(UsuarioModel).filter_by(email=data['sub']).first()
+
+        if user_on_db is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Invalid access token'
+            )

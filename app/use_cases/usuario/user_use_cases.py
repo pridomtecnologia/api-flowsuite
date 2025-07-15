@@ -1,6 +1,3 @@
-
-from fastapi import status
-from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 
 from app.gateways.usuario.user_gateway import UserGateway
@@ -28,20 +25,3 @@ class UserUseCases(UsuarioEntidade):
         except Exception as e:
             raise False
         
-
-    # def verify_token(self, access_token):
-    #     try:
-    #         data = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
-    #     except JWTError:
-    #         raise HTTPException(
-    #             status_code=status.HTTP_401_UNAUTHORIZED,
-    #             detail='Invalid access token'
-    #         )
-        
-    #     user_on_db = self.db_session.query(UserGateway).filter_by(username=data['sub']).first()
-
-    #     if user_on_db is None:
-    #         raise HTTPException(
-    #             status_code=status.HTTP_401_UNAUTHORIZED,
-    #             detail='Invalid access token'
-    #         )
