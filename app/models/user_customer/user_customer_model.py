@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, func
 from app.drivers.base import Base
 
-class UserCustomerAddressModel(Base):
-    __tablename__ = "user_customers_addresses"
+class UserCustomerModel(Base):
+    __tablename__ = "user_customers"
 
     id_user_customer = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id_user", ondelete="CASCADE"))

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class CustomerSchemas(BaseModel):
+class RegisterCustomerSchemas(BaseModel):
     razao_social: str
     nome_fantasia: str
     cnpj: str
