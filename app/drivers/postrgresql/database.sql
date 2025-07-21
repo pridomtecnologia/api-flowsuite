@@ -33,7 +33,7 @@ create table role_permissions (
 	role_id INTEGER not null,
 	permission_id INTEGER not null,
 	created_at TIMESTAMP DEFAULT NOW(),
-	updated_at TIMESTAMP DEFAULT NOW()
+	updated_at TIMESTAMP DEFAULT NOW(),
 	PRIMARY KEY (role_id, permission_id),
     FOREIGN KEY (role_id) REFERENCES roles(id_role) ON DELETE CASCADE,
     FOREIGN KEY (permission_id) REFERENCES permissions(id_permission) ON DELETE CASCADE
@@ -44,7 +44,7 @@ create table user_roles (
 	role_id INTEGER not null,
 	PRIMARY KEY (user_id, role_id),
 	created_at TIMESTAMP DEFAULT NOW(),
-	updated_at TIMESTAMP DEFAULT NOW()
+	updated_at TIMESTAMP DEFAULT NOW(),
 	FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE cascade,
     FOREIGN KEY (role_id) REFERENCES roles(id_role) ON DELETE CASCADE
 );
@@ -55,7 +55,7 @@ create table logs(
     action VARCHAR(100) NOT NULL, 
     data JSONB, 
     created_at TIMESTAMP DEFAULT NOW(),
-	updated_at TIMESTAMP DEFAULT NOW()
+	updated_at TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id_user)
 );
 
@@ -87,7 +87,7 @@ create table addresses(
 	updated_at TIMESTAMP DEFAULT NOW()
 );
 
-create table user_customers_addresses(
+create table user_customers(
 	id_user_customer INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
 	user_id integer not null,
 	customer_id integer not null,
