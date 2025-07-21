@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from app.schemas.customer.customer_schemas import RegisterCustomerSchemas
+from app.schemas.customer.customer_schemas import RegisterCustomerSchema
 
 class CustomerEntities(ABC):
     
     @abstractmethod
-    def create_customer(self, customer: RegisterCustomerSchemas): pass
+    def create_customer(self, customer: RegisterCustomerSchema): pass
