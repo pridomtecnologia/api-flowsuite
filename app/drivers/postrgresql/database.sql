@@ -59,17 +59,19 @@ create table logs(
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id_user)
 );
 
-create table customers(
-	id_customer INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
+create table cadastros(
+	id_cadastro INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
+	tag_id INTEGER not null,
 	razao_social varchar(255) not null,
 	nome_fantasia varchar(255) not null,
-	cnpj varchar(20) not null UNIQUE,
+	documento varchar(20) not null UNIQUE,
 	email varchar(150) not null UNIQUE,
 	telefone varchar(20) not null,
 	responsavel_contato varchar(255) not null,
 	observacao text,
 	created_at TIMESTAMP DEFAULT NOW(),
-	updated_at TIMESTAMP DEFAULT NOW()
+	updated_at TIMESTAMP DEFAULT NOW(),
+	FOREIGN KEY (tag_id) REFERENCES tags(id_tag) ON DELETE cascade
 );
 
 create table addresses(
@@ -81,18 +83,24 @@ create table addresses(
 	cidade varchar(255) not null,
 	cep varchar(10) not null,
 	complemento TEXT,
-	owner_type VARCHAR(150) NOT NULL,
     owner_id INTEGER NOT NULL,
 	created_at TIMESTAMP DEFAULT NOW(),
 	updated_at TIMESTAMP DEFAULT NOW()
 );
 
-create table user_customers(
-	id_user_customer INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
+create table user_cadastros(
+	id_user_cadastro INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
 	user_id integer not null,
-	customer_id integer not null,
+	cadastro_id integer not null,
 	created_at TIMESTAMP DEFAULT NOW(),
 	updated_at TIMESTAMP DEFAULT NOW(),
 	FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE cascade,
-	FOREIGN KEY (customer_id) REFERENCES customers(id_customer) ON DELETE cascade
+	FOREIGN KEY (cadastro_id) REFERENCES cadastros(id_cadastro) ON DELETE cascade
+);
+
+create table tags(
+	id_tag INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
+	tag varchar(255) not null,
+	created_at TIMESTAMP DEFAULT NOW(),
+	updated_at TIMESTAMP DEFAULT NOW()
 );

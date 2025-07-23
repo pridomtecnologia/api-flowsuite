@@ -1,13 +1,14 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, func
 from app.drivers.base import Base
 
-class CustomerModel(Base):
-    __tablename__ = "customers"
+class CadastroModel(Base):
+    __tablename__ = "cadastros"
 
-    id_customer = Column(Integer, primary_key=True)
+    id_cadastro = Column(Integer, primary_key=True)
+    tag_id = Column(Integer, nullable=False)
     razao_social = Column(String(255), nullable=False)
     nome_fantasia = Column(String(255), nullable=False)
-    cnpj = Column(String(20), nullable=False, unique=True)
+    documento = Column(String(20), nullable=False, unique=True)
     email = Column(String(150), nullable=False, unique=True)
     telefone = Column(String(20), nullable=False)
     responsavel_contato = Column(String(255), nullable=False)
