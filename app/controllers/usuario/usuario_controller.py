@@ -9,15 +9,9 @@ class UsuarioController:
 
     def user_register(self, user):
         
-        if not user.name or not user.email or not user.password:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail={'message': 'Obrigatório preencher todas informações'},
-            )
-        
         try:
             
-            use_case = UserUseCases(db_session=self.db_session).user_register(user=user)
+            UserUseCases(db_session=self.db_session).user_register(user=user)
             
             return JSONResponse(
                 content={'message': 'Usuário criado com sucesso'},
@@ -27,7 +21,7 @@ class UsuarioController:
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail={'message': 'Erro ao cadastrar usuário'}
+                detail={'message': f'Erro ao cadastrar usuário: {str(e)}'}
             )
             
     def user_login(self, user):
@@ -52,3 +46,45 @@ class UsuarioController:
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail={'message': 'Erro ao realizar autenticação'}
             )
+            
+    def list_users(self):
+        try:
+            users = UserUseCases(db_session=self.db_session).list_users()
+            return JSONResponse(
+                content=users,
+                status_code=status.HTTP_200_OK
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={'message': f'Erro ao listar usuários: {str(e)}'}
+            )
+            
+    def user_update(self, id_user, user):
+        try:
+            updated_user = UserUseCases(db_session=self.db_session).user_update(id_user=id_user, user=user)
+            
+            return JSONResponse(
+                content={'message': 'Usuário atualizado com sucesso', 'user': updated_user},
+                status_code=status.HTTP_200_OK
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={'message': f'Erro ao atualizar usuário: {str(e)}'}
+            )
+            
+    def user_delete(self, id_user):
+        try:
+            UserUseCases(db_session=self.db_session).user_delete(id_user=id_user)
+            return JSONResponse(
+                content={'message': 'Usuário deletado com sucesso'},
+                status_code=status.HTTP_200_OK
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={'message': f'Erro ao deletar usuário: {str(e)}'}
+            )
+            
+            

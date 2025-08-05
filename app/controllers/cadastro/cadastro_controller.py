@@ -17,4 +17,13 @@ class CadastroController:
         
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Erro no cadastro!")
+        
+    def listar_cadastro(self):
+        
+        try:
+            cadastros = self.customer_use_case.listar_cadastro()
+            return JSONResponse(content=cadastros, status_code=status.HTTP_200_OK)
+        
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Erro ao listar cadastros!")
     

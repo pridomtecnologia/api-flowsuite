@@ -40,3 +40,9 @@ class CadastroGateway(CadastroEntities):
             
         except Exception as e:
             raise False
+    
+    def listar_cadastro(self):
+        try:
+            return self.db_session.query(CadastroModel).all()
+        except Exception as e:
+            raise False

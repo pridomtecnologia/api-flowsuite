@@ -23,3 +23,9 @@ class CadastroUseCases(CadastroEntities):
             raise False
         except Exception as e:
             raise False
+        
+    def listar_cadastro(self): 
+        try:
+            return self.cadastro_gateway.listar_cadastro()
+        except Exception as e:
+            raise False
