@@ -5,7 +5,6 @@ class CadastroModel(Base):
     __tablename__ = "cadastros"
 
     id_cadastro = Column(Integer, primary_key=True)
-    tag_id = Column(Integer, nullable=False)
     razao_social = Column(String(255), nullable=False)
     nome_fantasia = Column(String(255), nullable=False)
     documento = Column(String(20), nullable=False, unique=True)

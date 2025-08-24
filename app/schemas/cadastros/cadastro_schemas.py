@@ -20,6 +20,12 @@ class RegisterSchema(BaseModel):
     telefone: str
     responsavel_contato: str
     observacao: str
+    banco: str
+    agencia: str
+    conta_corrente: str
+    inscricao_estadual: str
+    inscricao_municipal: str
+    web_site: str
     address: List[EnderecoSchema]
     
 class ListarCadastroSchema(BaseModel):
@@ -33,4 +39,28 @@ class ListarCadastroSchema(BaseModel):
     telefone: str
     responsavel_contato: str
     observacao: str
+    banco: str
+    agencia: str
+    conta_corrente: str
+    inscricao_estadual: str
+    inscricao_municipal: str
+    web_site: str
+    address: List[EnderecoSchema]
+
+class UpdateCadastroSchema(BaseModel):
+    id_user: int
+    tag_id: List[int]
+    razao_social: str
+    nome_fantasia: str
+    documento: str
+    email: str
+    telefone: str
+    responsavel_contato: str
+    observacao: str
+    banco: str
+    agencia: str
+    conta_corrente: str
+    inscricao_estadual: str
+    inscricao_municipal: str
+    web_site: str
     address: List[EnderecoSchema]

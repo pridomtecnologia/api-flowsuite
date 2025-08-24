@@ -47,7 +47,6 @@ class UserGateway(UsuarioEntidade):
             self.db_session.commit()
 
             for user_permission in user.permissions:
-                print(user_permission)
                 
                 user_permission_model = UserPermissionModel(
                     user_id=id_user,

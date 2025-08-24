@@ -29,3 +29,19 @@ class CadastroUseCases(CadastroEntities):
             return self.cadastro_gateway.listar_cadastro()
         except Exception as e:
             raise False
+
+    def atualizar_cadastro(self, id_cadastro: int, cadastro):
+        try:
+            self.cadastro_gateway.atualizar_cadastro(id_cadastro=id_cadastro, cadastro=cadastro)
+            return True
+        except Exception as e:
+            raise False
+        
+    def deletar_cadastro(self, id_cadastro: int):
+        try:
+            self.cadastro_gateway.deletar_cadastro(id_cadastro=id_cadastro)
+            return True
+        except Exception as e:
+            raise False
+        
+        

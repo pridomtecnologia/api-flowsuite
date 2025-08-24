@@ -7,6 +7,11 @@ from app.schemas.user_schema import CreateUserSchemas, UserLoginSchemas, Atualiz
 
 router = APIRouter(prefix='/user', tags=['usuario'])
 
+@router.post('/register_admin', summary='Cadastrar usuário no sistema sendo ADM')
+def register_admin(user: CreateUserSchemas, db_session: Session = Depends(get_db_session)):
+    
+    return UsuarioController(db_session=db_session).user_register(user=user)
+    
 @router.post('/register', dependencies=[Depends(token_verifier)], summary='Cadastrar usuário no sistema')
 def register(user: CreateUserSchemas, db_session: Session = Depends(get_db_session)):
     

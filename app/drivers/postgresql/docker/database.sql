@@ -32,6 +32,10 @@ create table permissions (
 insert into permissions (permission) values ('Dashboard');
 insert into permissions (permission) values ('Cadastros');
 insert into permissions (permission) values ('Projetos');
+insert into permissions (permission) values ('Produtos');
+insert into permissions (permission) values ('Pedidos de Compra');
+insert into permissions (permission) values ('Pedidos de Venda');
+insert into permissions (permission) values ('Estoque');
 
 create table user_permissions (
 	user_id INTEGER not null,
@@ -64,6 +68,7 @@ insert into tags (tag) values ('Cliente');
 insert into tags (tag) values ('Fornecedor');
 insert into tags (tag) values ('Funcionário');
 insert into tags (tag) values ('Artista');
+insert into tags (tag) values ('Vendedor');
 
 
 create table logs(
@@ -85,14 +90,20 @@ create table cadastros(
 	telefone varchar(20) not null,
 	responsavel_contato varchar(255) not null,
 	observacao text,
+	banco varchar(250) DEFAULT NULL,
+	agencia varchar(10) DEFAULT NULL,
+	conta_corrente varchar(20) DEFAULT NULL,
+	inscricao_estadual varchar(100) DEFAULT NULL,
+	inscricao_municipal varchar(100) DEFAULT NULL,
+	web_site varchar(200) DEFAULT NULL,
 	created_at TIMESTAMP DEFAULT NOW(),
 	updated_at TIMESTAMP DEFAULT NOW()
 );
 
 create table cadastro_tag (
+	id_cadastro_tag INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
 	cadastro_id INTEGER not null,
 	tag_id INTEGER not null,
-	PRIMARY KEY (cadastro_id, tag_id),
 	created_at TIMESTAMP DEFAULT NOW(),
 	updated_at TIMESTAMP DEFAULT NOW(),
 	FOREIGN KEY (cadastro_id) REFERENCES cadastros(id_cadastro) ON DELETE cascade,
@@ -238,3 +249,36 @@ create table orcamento_jobs (
     FOREIGN KEY (status_job_id) REFERENCES status_job(id_status_job) ON DELETE cascade
 );
 
+create table tipo_controle(
+	id_tipo_controle INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
+	tipo_controle varchar(100) not null,
+	created_at TIMESTAMP DEFAULT NOW(),
+	updated_at TIMESTAMP DEFAULT NOW()
+);
+
+insert into tipo_controle (tipo_controle) values ('Unidade');
+insert into tipo_controle (tipo_controle) values ('Rolo / Bobina');
+insert into tipo_controle (tipo_controle) values ('Número de Série');
+
+create table produtos(
+	id_produto INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY key,
+	codigo_sku varchar(100) not null,
+	descricao varchar(255) not null,
+	categoria varchar(100) not null,
+	marca varchar(100) not null,
+	modelo varchar(100) not null,
+	codigo_fabrica varchar(100),
+	tipo_material varchar(100) not null,
+	unidade_medida varchar(100) not null,
+	ncm varchar(100) not null,
+	caracteristicas_tecnicas text,
+	tipo_controle_id integer not null,
+	estoque_minimo integer not null,
+	estoque_maximo integer not null,
+	preco_custo NUMERIC(10, 2) not null,
+	preco_venda NUMERIC(10, 2) not null,
+	garantia integer not null,
+	created_at TIMESTAMP DEFAULT NOW(),
+	updated_at TIMESTAMP DEFAULT NOW(),
+	FOREIGN KEY (tipo_controle_id) REFERENCES tipo_controle(id_tipo_controle) ON DELETE cascade
+);
